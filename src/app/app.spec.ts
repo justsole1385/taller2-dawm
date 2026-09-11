@@ -14,10 +14,19 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('should render the contacts stored in memory as table rows', () => {
     const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, dashboard-app');
+    const rows = Array.from(compiled.querySelectorAll('tbody tr'));
+
+    expect(rows).toHaveLength(3);
+    expect(rows.map((row) =>
+      Array.from(row.querySelectorAll('td')).map((cell) => cell.textContent?.trim()),
+    )).toEqual([
+      ['1', 'María López', 'maria@example.com'],
+      ['2', 'Carlos Ruiz', 'carlos@example.com'],
+      ['3', 'Ana Gómez', 'ana@example.com'],
+    ]);
   });
 });
