@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ContactRow } from '../contact-row/contact-row';
+import { ContactsService } from '../../servicios/contacts';
 
 @Component({
   selector: 'app-contact-list',
@@ -8,12 +9,22 @@ import { ContactRow } from '../contact-row/contact-row';
   templateUrl: './contact-list.html',
   styleUrl: './contact-list.css',
 })
-export class ContactListComponent {
-  contacts: Contact[] = [
-    { id: 1, name: 'María López', email: 'maria@example.com' },
-    { id: 2, name: 'Carlos Ruiz', email: 'carlos@example.com' },
-    { id: 3, name: 'Ana Gómez', email: 'ana@example.com' },
-  ];
+export class ContactListComponent implements OnInit {
+  private contactsService = inject(ContactsService);
+  contacts: Contact[] = [];
+  cargando = true;
+
+  ngOnInit(): void {
+    this.contactsService.getContacts().subscribe({
+      next: (data) => {
+        this.contacts = data;
+        this.cargando = false;
+      },
+      error: () => {
+        this.cargando = false;
+      },
+    });
+  }
 }
 
 export { ContactListComponent as ContactList };

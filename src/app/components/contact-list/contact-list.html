@@ -7,8 +7,14 @@
     </tr>
   </thead>
   <tbody>
-    @for (contact of contacts; track contact.id) {
-      <app-contact-row [contact]="contact"></app-contact-row>
+    @if (cargando) {
+      <tr>
+        <td colspan="3">Cargando contactos...</td>
+      </tr>
+    } @else {
+      @for (contact of contacts; track contact.id) {
+        <app-contact-row [contact]="contact"></app-contact-row>
+      }
     }
   </tbody>
 </table>
